@@ -4,11 +4,13 @@
   "description": "App de fotos",
   "main": "main.js",
   "scripts": {
-    "dev": "electron ./src/index.js"
+    "dev": "cross-env NODE_ENV=development electron ./src/index.js"
   },
   "author": "Rafael",
   "license": "ISC",
   "dependencies": {
-    "electron": "^22.0.2"
+    "cross-env": "^7.0.3",
+    "electron": "^22.0.2",
+    "electron-reload": "^2.0.0-alpha.1"
   }
 }
