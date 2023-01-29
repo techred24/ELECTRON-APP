@@ -1,0 +1,14 @@
+{
+  "name": "fotos",
+  "version": "1.0.0",
+  "description": "App de fotos",
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron ./src/index.js"
+  },
+  "author": "Rafael",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^22.0.2"
+  }
+}
