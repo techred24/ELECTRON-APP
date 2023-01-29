@@ -11,6 +11,10 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "electron": "^22.0.2",
+    "electron-debug": "^3.2.0",
     "electron-reload": "^2.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "electron-devtools-installer": "^3.2.0"
   }
 }
