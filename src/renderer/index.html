@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recargas App</title>
+    <title>Fotos App</title>
     <link rel="stylesheet" href="../assets/css/photon.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
   <div class="window">
@@ -54,11 +55,28 @@
           </ul>
         </div>
         <div class="pane">
-          <div class="toolbar-actions">
-            <div class="btn-group">
-              <button class="btn btn-default">
-                <span class="icon icon-home"></span>
-              </button>
+          <div class="image-view full-height">
+            <header class="toolbar toolbar-header image-toolbar">
+              <div class="toolbar-actions">
+                <div class="btn-group">
+                  <button class="btn btn-default">
+                    <span class="icon icon-folder icon-text"></span>
+                    Abrir ubicación
+                  </button>
+                </div>
+                  <button class="btn btn-default pull-right">
+                    <span class="icon icon-download icon-text"></span>
+                    Guardar
+                  </button>
+                  <select id="filters" class="pull-right">
+                    <option value="none">Ninguno</option>
+                    <option value="sepia">Sepia</option>
+                  </select>
+                  <label class="pull-right filter-label">Filtros: </label>
+              </div>
+            </header>
+            <div class="image-container">
+              <img id="image-displayed" src="../assets/img/1.jpg" alt="">
             </div>
           </div>
       </div>

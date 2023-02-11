@@ -27,8 +27,9 @@ app.on('ready', () => {
         // backgroundColor: 'black',
         show: false,
         webPreferences: {
-            nodeIntegration: false,
-            // nodeIntegration: true,
+            // nodeIntegration: false,
+            nodeIntegration: true,
+            contextIsolation: false,
             devTools: true,
         }
     });
