@@ -1,12 +1,25 @@
 const os = require('os')
 const url = require('url');
 const path = require('path');
+const applyFilter = require('./filters');
+const { setIpc, sendIpc } = require('./ipcRendererEvents');
 window.addEventListener('load', () => {
     // document.getElementById('mensaje').innerHTML = 'Message inserted by JS'
     // console.log(os.cpus())
+    setIpc();
     addImagesEvents();
     searchImagesEvent();
+    selectEvent();
+    openDirectory()
 });
+
+function openDirectory() {
+    const openDirectory = document.getElementById('open-directory')
+    openDirectory.addEventListener('click', () => {
+        console.log('clicked')
+        sendIpc();
+    })
+}
 
 function addImagesEvents() {
     const thumbs = document.querySelectorAll('li.list-group-item');
@@ -18,10 +31,22 @@ function addImagesEvents() {
     }
 }
 
+function selectEvent() {
+    const select = document.getElementById('filters');
+    select.addEventListener('change', function() {
+        console.log(this.value);
+        applyFilter(this.value, document.getElementById('image-displayed'));
+    })
+}
+
 function changeImage(node) {
-    document.querySelector('li.selected').classList.remove('selected');
-    node.classList.add('selected');
-    document.getElementById('image-displayed').src = node.querySelector('img').src;
+    if (node) {
+        document.querySelector('li.selected').classList.remove('selected');
+        node.classList.add('selected');
+        document.getElementById('image-displayed').src = node.querySelector('img').src;
+    } else {
+        document.getElementById('image-displayed').src = '';
+    }
 }
 
 function searchImagesEvent() {
@@ -42,6 +67,11 @@ function searchImagesEvent() {
                 }
             }
             selectFirstImage();
+        } else {
+            const hidden = document.querySelectorAll('li.hidden')
+            for (let i = 0, length1 = hidden.length; i < length1; i++) {
+                hidden[i].classList.remove('hidden');
+            }
         }
     })
 }

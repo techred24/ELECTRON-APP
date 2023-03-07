@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const { devtools } = require('../devtools');
 // const installExtension = require('electron-devtools-installer');
 // const { REDUX_DEVTOOLS } = require('electron-devtools-installer');
@@ -50,3 +50,9 @@ app.on('ready', () => {
     // win.loadURL(`file://${__dirname}/index.html`);
     win.loadFile(`./renderer/index.html`);
 });
+
+ipcMain.on('ping', (event, arg) => {
+    console.log(event, 'Evento');
+    console.log(arg, 'Argumento');
+    event.sender.send('pong', new Date());
+})
