@@ -1,9 +1,12 @@
 'use strict'
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { devtools } = require('../devtools');
 // const installExtension = require('electron-devtools-installer');
 // const { REDUX_DEVTOOLS } = require('electron-devtools-installer');
+
+let win;
+
 if(process.env.NODE_ENV === 'development'){
     devtools();
 }
@@ -16,7 +19,7 @@ app.on('ready', () => {
     // installExtension(REDUX_DEVTOOLS)
     //     .then((name) => console.log(`Added Extension:  ${name}`))
     //     .catch((err) => console.log('An error occurred: ', err));
-    let win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 800,
         height: 600,
         minWidth: 700,
@@ -51,8 +54,19 @@ app.on('ready', () => {
     win.loadFile(`./renderer/index.html`);
 });
 
-ipcMain.on('ping', (event, arg) => {
-    console.log(event, 'Evento');
-    console.log(arg, 'Argumento');
-    event.sender.send('pong', new Date());
-})
+ipcMain.on('open-directory', async (event) => {
+    // console.log(event, 'Evento');
+    // console.log(arg, 'Argumento');
+    // event.sender.send('pong', new Date());
+    try {
+        const dir = await dialog.showOpenDialog(win, {
+            title: 'Seleccione la nueva ubicación',
+            buttonLabel: 'Abrir ubicación',
+            properties: ['openDirectory']
+        });
+        console.log(dir);
+    } catch(e) {
+        console.log(e);
+        console.log('OCURRIO UN ERROR AL SELECCIONAR DIRECTORIO');
+    }
+});

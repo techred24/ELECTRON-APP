@@ -9,13 +9,13 @@ function setIpc () {
 }
 
 // Sending a message to main process
-function sendIpc () {
+function openDirectory () {
     console.log('sending to main process')
     // The fist argument is the name of the event
-    ipcRenderer.send('ping', new Date());
+    ipcRenderer.send('open-directory');
 }
 
 module.exports={
     setIpc,
-    sendIpc
+    openDirectory
 }

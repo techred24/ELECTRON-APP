@@ -2,7 +2,7 @@ const os = require('os')
 const url = require('url');
 const path = require('path');
 const applyFilter = require('./filters');
-const { setIpc, sendIpc } = require('./ipcRendererEvents');
+const { setIpc, openDirectory } = require('./ipcRendererEvents');
 window.addEventListener('load', () => {
     // document.getElementById('mensaje').innerHTML = 'Message inserted by JS'
     // console.log(os.cpus())
@@ -10,15 +10,13 @@ window.addEventListener('load', () => {
     addImagesEvents();
     searchImagesEvent();
     selectEvent();
-    openDirectory()
+    //openDirectory()
+    buttonEvent('open-directory', openDirectory);
 });
 
-function openDirectory() {
-    const openDirectory = document.getElementById('open-directory')
-    openDirectory.addEventListener('click', () => {
-        console.log('clicked')
-        sendIpc();
-    })
+function buttonEvent(id, func) {
+    const openDirectory = document.getElementById(id)
+    openDirectory.addEventListener('click', func)
 }
 
 function addImagesEvents() {
