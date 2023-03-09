@@ -4,6 +4,10 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { devtools } = require('../devtools');
 // const installExtension = require('electron-devtools-installer');
 // const { REDUX_DEVTOOLS } = require('electron-devtools-installer');
+const fs = require('fs');
+const isImage = require('is-image');
+const path = require('path');
+const { filesize } = require('filesize');
 
 let win;
 
@@ -64,9 +68,38 @@ ipcMain.on('open-directory', async (event) => {
             buttonLabel: 'Abrir ubicación',
             properties: ['openDirectory']
         });
-        console.log(dir);
+        if (dir.filePaths[0]) {
+            const images = [];
+            fs.readdir(dir.filePaths[0], (err, files) => {
+                if (err) throw err
+
+                files.forEach(file => {
+                    let imageFile = path.join(dir.filePaths[0], file)
+                    console.log(imageFile, 'RUTA IMAGEN');
+                    let stats = fs.statSync(imageFile);
+                    console.log(stats.size, 'EL SIZE DE LA IMAGEN');
+                    let size = filesize( stats.size, { round: 0} );
+                    if (isImage(file)) images.push({ filename: file, src: fileUrl(imageFile), size });
+                });
+                event.sender.send('load-images', images);
+            });
+        }
     } catch(e) {
         console.log(e);
         console.log('OCURRIO UN ERROR AL SELECCIONAR DIRECTORIO');
     }
 });
+function fileUrl(str) {
+    if (typeof str !== 'string') {
+        throw new Error('Expected a string');
+    }
+
+    var pathName = path.resolve(str).replace(/\\/g, '/');
+
+    // Windows drive letter must be prefixed with a slash
+    if (pathName[0] !== '/') {
+        pathName = '/' + pathName;
+    }
+
+    return encodeURI('file://' + pathName);
+};
