@@ -89,6 +89,21 @@ ipcMain.on('open-directory', async (event) => {
         console.log('OCURRIO UN ERROR AL SELECCIONAR DIRECTORIO');
     }
 });
+
+ipcMain.on('open-save-dialog', async (event, ext) => {
+    console.log(ext);
+    let dialogOptions = await dialog.showSaveDialog(win, {
+        title: 'Guardar imagen modificada',
+        buttonLabel: 'Guardar imagen',
+        filters: [{name: 'Images', extensions: [ext.substr(1)]}]
+    });
+    console.log(dialogOptions, 'FILE OPTS');
+    console.log(dialogOptions.filePath, 'FILE PATH');
+    if (dialogOptions.filePath) {
+        event.sender.send('save-image', dialogOptions.filePath);
+    }
+});
+
 function fileUrl(str) {
     if (typeof str !== 'string') {
         throw new Error('Expected a string');

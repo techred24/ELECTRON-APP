@@ -1,62 +1,20 @@
 const { contextBridge, ipcRenderer } = require('electron')
-
-function clearImages() {
-    const oldImages = document.querySelectorAll('li.list-group-item');
-    //Array.from(oldImages)
-    //[...oldImages]
-    //const nodesArray = Array.prototype.slice.call(oldImages);
-    //const nodesArray = [].slice.call(oldImages);
-    for (let i = 0, length1 = oldImages.length; i < length1; i++) {
-        oldImages[i].parentNode.removeChild(oldImages[i]);
-    }
-}
-function loadImages(images) {
-    const imagesList = document.querySelector('ul.list-group');
-    images.forEach(({src, filename, size}) => {
-        const node = `<li class="list-group-item">
-                        <img class="media-object pull-left" src="${src}"  height="32">
-                        <div class="media-body">
-                        <strong>${filename}</strong>
-                        <p>${size}</p>
-                        </div>
-                    </li>`
-                    imagesList.insertAdjacentHTML('beforeend', node);
-    });
-}
-
-function addImagesEvent() {
-    const thumbs = document.querySelectorAll('li.list-group-item');
-    [...thumbs].forEach(thumb => thumb.addEventListener('click', function() {
-        changeImage(this);
-    }))
-}
-
-function changeImage(node) {
-    if (node) {
-        const selected = document.querySelector('li.selected') 
-        selected ? selected.classList.remove('selected') : null;
-        node.classList.add('selected');
-        document.getElementById('image-displayed').src = node.querySelector('img').src;
-    } else {
-        document.getElementById('image-displayed').src = '';
-    }
-}
-
-function selectFirstImage() {
-    const image = document.querySelector('li.list-group-item:not(.hidden)');
-    changeImage(image);
-}
-
+const { addImagesEvents, selectFirstImage, loadImages, clearImages } = require('./images-ui');
+const path = require('path');
 function setIpc () {
     // If an event is produced, pong will receive an event and an argument. It could receive more arguments
     // The argument awaited is the date from main process
     ipcRenderer.on('load-images', (event, images) => {
         clearImages();
         loadImages(images);
-        addImagesEvent();
+        addImagesEvents();
         selectFirstImage();
         console.log(images);
     });
+
+    ipcRenderer.on('save-image', (event, file) => {
+        console.log(file);
+    })
 }
 
 // Sending a message to main process
@@ -66,7 +24,30 @@ function openDirectory () {
     ipcRenderer.send('open-directory');
 }
 
+function saveFile() {
+    const image = document.getElementById('image-displayed').dataset.original;
+    console.log(image, 'EL DATASET')
+    if(!image) return
+    const ext = path.extname(fileUrl(image));
+    ipcRenderer.send('open-save-dialog', ext);
+}
+function fileUrl(str) {
+    if (typeof str !== 'string') {
+        throw new Error('Expected a string');
+    }
+
+    var pathName = path.resolve(str).replace(/\\/g, '/');
+
+    // Windows drive letter must be prefixed with a slash
+    if (pathName[0] !== '/') {
+        pathName = '/' + pathName;
+    }
+
+    return encodeURI('file://' + pathName);
+};
+
 module.exports={
     setIpc,
-    openDirectory
+    openDirectory,
+    saveFile
 }
