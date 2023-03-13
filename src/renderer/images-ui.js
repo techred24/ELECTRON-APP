@@ -1,4 +1,4 @@
-const applyFilter = require('./filters');
+const {applyFilter} = require('./filters');
 const url = require('url');
 const path = require('path');
 
@@ -17,6 +17,7 @@ function changeImage(node) {
         const image = document.getElementById('image-displayed');
         image.src = node.querySelector('img').src;
         image.dataset.original = image.src;
+        document.getElementById('filters').selectedIndex = 0;
         console.log(image.dataset, 'DATASET')
     } else {
         document.getElementById('image-displayed').src = '';

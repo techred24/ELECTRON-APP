@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron')
 const { addImagesEvents, selectFirstImage, loadImages, clearImages } = require('./images-ui');
 const path = require('path');
+const { saveImage } = require('./filters');
 function setIpc () {
     // If an event is produced, pong will receive an event and an argument. It could receive more arguments
     // The argument awaited is the date from main process
@@ -13,7 +14,8 @@ function setIpc () {
     });
 
     ipcRenderer.on('save-image', (event, file) => {
-        console.log(file);
+        console.log(file, 'SAVING IMAGE');
+        saveImage(file);
     })
 }
 
