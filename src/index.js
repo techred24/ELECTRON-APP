@@ -103,6 +103,13 @@ ipcMain.on('open-save-dialog', async (event, ext) => {
         event.sender.send('save-image', dialogOptions.filePath);
     }
 });
+ipcMain.on('show-dialog', async (event, { type, title, message }) => {
+    dialog.showMessageBox(win, {
+        type,
+        title,
+        message
+    });
+});
 
 function fileUrl(str) {
     if (typeof str !== 'string') {

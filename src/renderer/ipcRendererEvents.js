@@ -15,8 +15,12 @@ function setIpc () {
 
     ipcRenderer.on('save-image', (event, file) => {
         console.log(file, 'SAVING IMAGE');
-        saveImage(file);
+        saveImage(file, callbackToShowDialog);
     })
+}
+function callbackToShowDialog (err) {
+    if (err) return showDialog('error', 'Mensaje de error', err.message);
+    showDialog('info', 'Mensaje', 'La imagen fue guardada');
 }
 
 // Sending a message to main process
@@ -25,6 +29,11 @@ function openDirectory () {
     // The fist argument is the name of the event
     ipcRenderer.send('open-directory');
 }
+
+function showDialog(type, title, message) {
+    ipcRenderer.send('show-dialog', { type, title, message });
+}
+
 
 function saveFile() {
     const image = document.getElementById('image-displayed').dataset.original;
