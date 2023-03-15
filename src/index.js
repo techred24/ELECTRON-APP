@@ -8,6 +8,7 @@ const fs = require('fs');
 const isImage = require('is-image');
 const path = require('path');
 const { filesize } = require('filesize');
+const handleErrors = require('./handle-errors');
 
 let win;
 
@@ -40,6 +41,7 @@ app.on('ready', () => {
             devTools: true,
         }
     });
+    handleErrors(win);
     // win.webContents.openDevTools();
     win.removeMenu();
     win.once('ready-to-show', () => {
