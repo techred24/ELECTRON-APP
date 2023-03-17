@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer, remote } = require('electron')
 const { addImagesEvents, selectFirstImage, loadImages, clearImages } = require('./images-ui');
 const path = require('path');
 const { saveImage } = require('./filters');
@@ -23,6 +23,21 @@ function callbackToShowDialog (err) {
     showDialog('info', 'Mensaje', 'La imagen fue guardada');
 }
 
+function openPreferences () {
+    // const {BrowserWindow} = window.require("@electron/remote");
+    const {BrowserWindow} = require("@electron/remote");
+    const preferencesWindow = new BrowserWindow({
+        width: 400,
+        height: 300,
+        title: 'Preferencias',
+        center: true,
+        modal: true,
+        frame: true,
+        show: false
+    });
+    preferencesWindow.show();
+    preferencesWindow.removeMenu();
+}
 // Sending a message to main process
 function openDirectory () {
     console.log('sending to main process')
@@ -60,5 +75,6 @@ function fileUrl(str) {
 module.exports={
     setIpc,
     openDirectory,
-    saveFile
+    saveFile,
+    openPreferences
 }

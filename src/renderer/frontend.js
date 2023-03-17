@@ -1,5 +1,5 @@
 const os = require('os')
-const { setIpc, openDirectory, saveFile } = require('./ipcRendererEvents');
+const { setIpc, openDirectory, saveFile, openPreferences } = require('./ipcRendererEvents');
 const { addImagesEvents, searchImagesEvent, selectEvent } = require('./images-ui');
 
 window.addEventListener('load', () => {
@@ -11,6 +11,7 @@ window.addEventListener('load', () => {
     selectEvent();
     //openDirectory()
     buttonEvent('open-directory', openDirectory);
+    buttonEvent('open-preferences', openPreferences);
     buttonEvent('save-button', saveFile);
 });
 
