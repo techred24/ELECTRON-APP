@@ -45,6 +45,7 @@ function openPreferences () {
             enableRemoteModule: true,
         }
     });
+    require("@electron/remote/main").enable(preferencesWindow.webContents);
     // preferencesWindow.setParentWindow(mainWindow);
     preferencesWindow.once('ready-to-show', () => {
         preferencesWindow.show();

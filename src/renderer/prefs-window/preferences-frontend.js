@@ -1,5 +1,5 @@
 const { ipcRenderer } = require('electron');
-const remote = require("@electron/remote");
+const { getCurrentWindow } = require("@electron/remote");
 // import settings from 'electron-settings'
 // const settings = require('electron-settings');
 // import crypto from 'crypto'
@@ -25,7 +25,7 @@ function cancelButton () {
   const cancelButton = document.getElementById('cancel-button')
 
   cancelButton.addEventListener('click', () => {
-    const prefsWindow = remote.getCurrentWindow()
+    const prefsWindow = getCurrentWindow();
     prefsWindow.close()
   })
 }
