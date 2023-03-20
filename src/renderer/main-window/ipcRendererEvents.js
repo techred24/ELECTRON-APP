@@ -25,9 +25,8 @@ function callbackToShowDialog (err) {
 
 function openPreferences () {
     // const {BrowserWindow} = window.require("@electron/remote");
-    const {BrowserWindow} = require("@electron/remote");
-    // const {BrowserWindow, getGlobal, require} = window.require("@electron/remote");
-    const {getGlobal} = window.require("@electron/remote");
+    // const {BrowserWindow} = require("@electron/remote");
+    const {getGlobal, BrowserWindow, require: nodeRequire} = window.require("@electron/remote");
     const mainWindow = getGlobal('win');
     // const remoteMain = require("@electron/remote/main");
     // remoteMain.enable(preferencesWindow.webContents);
@@ -45,7 +44,7 @@ function openPreferences () {
             enableRemoteModule: true,
         }
     });
-    require("@electron/remote/main").enable(preferencesWindow.webContents);
+    nodeRequire("@electron/remote/main").enable(preferencesWindow.webContents);
     // preferencesWindow.setParentWindow(mainWindow);
     preferencesWindow.once('ready-to-show', () => {
         preferencesWindow.show();
