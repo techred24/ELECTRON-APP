@@ -38,7 +38,12 @@ function openPreferences () {
         center: true,
         modal: true,
         frame: false,
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
+        }
     });
     // preferencesWindow.setParentWindow(mainWindow);
     preferencesWindow.once('ready-to-show', () => {
