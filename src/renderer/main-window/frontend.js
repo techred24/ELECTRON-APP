@@ -1,6 +1,6 @@
 const os = require('os')
-const { setIpc, openDirectory, saveFile, openPreferences } = require('./ipcRendererEvents');
-const { addImagesEvents, searchImagesEvent, selectEvent } = require('./images-ui');
+const { setIpc, openDirectory, saveFile, openPreferences } = require('./main-window/ipcRendererEvents');
+const { addImagesEvents, searchImagesEvent, selectEvent } = require('./main-window/images-ui');
 
 window.addEventListener('load', () => {
     // document.getElementById('mensaje').innerHTML = 'Message inserted by JS'

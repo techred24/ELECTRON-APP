@@ -26,17 +26,27 @@ function callbackToShowDialog (err) {
 function openPreferences () {
     // const {BrowserWindow} = window.require("@electron/remote");
     const {BrowserWindow} = require("@electron/remote");
+    // const {BrowserWindow, getGlobal, require} = window.require("@electron/remote");
+    const {getGlobal} = window.require("@electron/remote");
+    const mainWindow = getGlobal('win');
+    // const remoteMain = require("@electron/remote/main");
+    // remoteMain.enable(preferencesWindow.webContents);
     const preferencesWindow = new BrowserWindow({
         width: 400,
         height: 300,
         title: 'Preferencias',
         center: true,
         modal: true,
-        frame: true,
+        frame: false,
         show: false
     });
-    preferencesWindow.show();
+    // preferencesWindow.setParentWindow(mainWindow);
+    preferencesWindow.once('ready-to-show', () => {
+        preferencesWindow.show();
+        preferencesWindow.focus();
+    });
     preferencesWindow.removeMenu();
+    preferencesWindow.loadFile(`./renderer/preferences.html`);
 }
 // Sending a message to main process
 function openDirectory () {

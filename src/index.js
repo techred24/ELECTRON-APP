@@ -11,7 +11,7 @@ const setIpcMain = require('./ipcMainEvents');
 // const path = require('path');
 // const { filesize } = require('filesize');
 
-let win;
+global.win ;
 
 if(process.env.NODE_ENV === 'development'){
     devtools();
@@ -25,7 +25,7 @@ app.on('ready', () => {
     // installExtension(REDUX_DEVTOOLS)
     //     .then((name) => console.log(`Added Extension:  ${name}`))
     //     .catch((err) => console.log('An error occurred: ', err));
-    win = new BrowserWindow({
+   global.win = new BrowserWindow({
         width: 800,
         height: 600,
         minWidth: 700,
@@ -44,23 +44,23 @@ app.on('ready', () => {
         }
     });
     require('@electron/remote/main').initialize()
-    require("@electron/remote/main").enable(win.webContents)
-    setIpcMain(win);
-    handleErrors(win);
-    // win.webContents.openDevTools();
-    win.removeMenu();
-    win.once('ready-to-show', () => {
-        win.show();
+    require("@electron/remote/main").enable(global.win.webContents)
+    setIpcMain(global.win);
+    handleErrors(global.win);
+    //global.win.webContents.openDevTools();
+   global.win.removeMenu();
+   global.win.once('ready-to-show', () => {
+       global.win.show();
     });
-    // win.on('move', () => {
-    //     const position = win.getPosition();
+    //global.win.on('move', () => {
+    //     const position =global.win.getPosition();
     //     console.log(`Position: ${position}`);
     // });
-    win.on('closed', () => {
-        win = null;
+   global.win.on('closed', () => {
+       global.win = null;
         app.quit();
     });
-    // win.loadURL('http://devdocs.io/');
-    // win.loadURL(`file://${__dirname}/index.html`);
-    win.loadFile(`./renderer/index.html`);
+    //global.win.loadURL('http://devdocs.io/');
+    //global.win.loadURL(`file://${__dirname}/index.html`);
+   global.win.loadFile(`./renderer/index.html`);
 });
