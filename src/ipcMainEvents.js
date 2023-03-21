@@ -16,25 +16,15 @@ function setMainIpc(win) {
                 properties: ['openDirectory']
             });
             if (dir.filePaths[0]) {
-                const images = [];
-                fs.readdir(dir.filePaths[0], (err, files) => {
-                    if (err) throw err
-    
-                    files.forEach(file => {
-                        let imageFile = path.join(dir.filePaths[0], file)
-                        console.log(imageFile, 'RUTA IMAGEN');
-                        let stats = fs.statSync(imageFile);
-                        console.log(stats.size, 'EL SIZE DE LA IMAGEN');
-                        let size = filesize( stats.size, { round: 0} );
-                        if (isImage(file)) images.push({ filename: file, src: fileUrl(imageFile), size });
-                    });
-                    event.sender.send('load-images', images);
-                });
+                loadImages(event, dir.filePaths[0]);
             }
         } catch(e) {
             console.log(e);
             console.log('OCURRIO UN ERROR AL SELECCIONAR DIRECTORIO');
         }
+    });
+    ipcMain.on('load-directory', (event, dir) => {
+        loadImages(event, dir);
     });
     
     ipcMain.on('open-save-dialog', async (event, ext) => {
@@ -58,6 +48,22 @@ function setMainIpc(win) {
             message
         });
     });
+    function loadImages (event, dir) {
+        const images = [];
+        fs.readdir(dir, (err, files) => {
+            if (err) throw err
+
+            files.forEach(file => {
+                let imageFile = path.join(dir, file)
+                console.log(imageFile, 'RUTA IMAGEN');
+                let stats = fs.statSync(imageFile);
+                console.log(stats.size, 'EL SIZE DE LA IMAGEN');
+                let size = filesize( stats.size, { round: 0} );
+                if (isImage(file)) images.push({ filename: file, src: fileUrl(imageFile), size });
+            });
+            event.sender.send('load-images', dir, images);
+        });
+    }
 }
 
 

@@ -1,16 +1,26 @@
 const { contextBridge, ipcRenderer, remote } = require('electron')
+const Store = require('electron-store');
 const { addImagesEvents, selectFirstImage, loadImages, clearImages } = require('./images-ui');
 const path = require('path');
 const { saveImage } = require('./filters');
-function setIpc () {
+const os = require('os');
+const store = new Store();
+async function setIpc () {
+    
+    //console.log((await settings.has('directory.name')))
+    // console.log((settings.hasSync('directory.name')))
+    if ((store.has('directory'))) {
+        ipcRenderer.send('load-directory', store.get('directory'));
+    }
     // If an event is produced, pong will receive an event and an argument. It could receive more arguments
     // The argument awaited is the date from main process
-    ipcRenderer.on('load-images', (event, images) => {
+    ipcRenderer.on('load-images', async (event, dir, images) => {
         clearImages();
         loadImages(images);
         addImagesEvents();
         selectFirstImage();
-        console.log(images);
+        store.set('directory', dir);
+        //console.log(images, settings.file());
     });
 
     ipcRenderer.on('save-image', (event, file) => {
@@ -45,7 +55,8 @@ function openPreferences () {
         }
     });
     nodeRequire("@electron/remote/main").enable(preferencesWindow.webContents);
-    // preferencesWindow.setParentWindow(mainWindow);
+    if (os.platform() !== 'win32') preferencesWindow.setParentWindow(mainWindow);
+    
     preferencesWindow.once('ready-to-show', () => {
         preferencesWindow.show();
         preferencesWindow.focus();
