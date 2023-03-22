@@ -6,10 +6,8 @@ const { devtools } = require('../devtools');
 // const { REDUX_DEVTOOLS } = require('electron-devtools-installer');
 const handleErrors = require('./handle-errors');
 const setIpcMain = require('./ipcMainEvents');
-// const fs = require('fs');
-// const isImage = require('is-image');
-// const path = require('path');
-// const { filesize } = require('filesize');
+const ElectronStore = require('electron-store');
+ElectronStore.initRenderer();
 
 global.win ;
 

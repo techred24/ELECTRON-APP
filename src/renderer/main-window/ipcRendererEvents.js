@@ -20,6 +20,7 @@ async function setIpc () {
         addImagesEvents();
         selectFirstImage();
         store.set('directory', dir);
+        document.getElementById('directory').innerText = dir
         //console.log(images, settings.file());
     });
 

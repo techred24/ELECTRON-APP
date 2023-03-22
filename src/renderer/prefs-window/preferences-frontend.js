@@ -1,24 +1,42 @@
 const { ipcRenderer } = require('electron');
 const { getCurrentWindow } = require("@electron/remote");
+const Store = require('electron-store');
+const CryptoJS = require("crypto-js");
 // import settings from 'electron-settings'
 // const settings = require('electron-settings');
 // import crypto from 'crypto'
+const store = new Store();
+// const cloudup = {
+// 	foo: {
+// 		type: 'number',
+// 		maximum: 100,
+// 		minimum: 1,
+// 		default: 50
+// 	},
+// 	bar: {
+// 		type: 'string',
+// 		format: 'url'
+// 	}
+// };
+
+// const store = new Store({cloudup});
 
 window.addEventListener('load', () => {
   cancelButton()
-//   saveButton()
+  saveButton()
 
-//   if (settings.has('cloudup.user')) {
-//     document.getElementById('cloudup-user').value = settings.get('cloudup.user')
-//   }
+  if (store.has('user')) {
+    document.getElementById('cloudup-user').value = store.get('user')
+  }
 
-//   if (settings.has('cloudup.passwd')) {
-//     const decipher = crypto.createDecipher('aes192', 'Platzipics')
-//     let decrypted = decipher.update(settings.get('cloudup.passwd'), 'hex', 'utf8')
-//     decrypted += decipher.final('utf8')
-
-//     document.getElementById('cloudup-passwd').value = decrypted
-//   }
+  if (store.has('passwd')) {
+    const decipher = CryptoJS.AES.decrypt(
+        store.get("passwd"),
+        "fotos app"
+      );
+      let decrypted = decipher.toString(CryptoJS.enc.Utf8);
+      document.getElementById('cloudup-passwd').value = decrypted;
+  }
 })
 
 function cancelButton () {
@@ -36,16 +54,18 @@ function saveButton () {
 
   saveButton.addEventListener('click', () => {
     if (prefsForm.reportValidity()) {
-      const cipher = crypto.createCipher('aes192', 'Platzipics')
-      let encrypted = cipher.update(document.getElementById('cloudup-passwd').value)
-      encrypted += cipher.final('hex')
+      const encrypted = CryptoJS.AES.encrypt(
+        document.getElementById(
+        "cloudup-passwd").value,
+        "fotos app"
+      ).toString();
 
-      settings.set('cloudup.user', document.getElementById('cloudup-user').value)
-      settings.set('cloudup.passwd', encrypted)
-      const prefsWindow = remote.getCurrentWindow()
+      store.set('user', document.getElementById('cloudup-user').value)
+      store.set('passwd', encrypted)
+      const prefsWindow = getCurrentWindow()
       prefsWindow.close()
     } else {
-      ipcRenderer.send('show-dialog', {type: 'error', title: 'Platzipics', message: 'Por favor complete los campos requeridos'})
+      ipcRenderer.send('show-dialog', {type: 'error', title: 'Fotos app', message: 'Por favor complete los campos requeridos'})
     }
   })
 }
