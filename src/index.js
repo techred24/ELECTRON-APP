@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, BrowserWindow, Tray } = require('electron');
+const { app, BrowserWindow, Tray, Menu } = require('electron');
 const { devtools } = require('../devtools');
 // const installExtension = require('electron-devtools-installer');
 // const { REDUX_DEVTOOLS } = require('electron-devtools-installer');
@@ -63,9 +63,10 @@ app.on('ready', () => {
     });
     let icon;
     if (os.platform() === 'win32') icon = path.join(__dirname, 'assets', 'icons', 'tray-icon.ico')
-    else path.join(__dirname, 'assets', 'icons', 'tray-icon.png')
+    else icon = path.join(__dirname, 'assets', 'icons', 'tray-icon.png')
+    // console.log(icon)
     global.tray = new Tray(icon);
-    global.setToolTip('Fotos App');
+    global.tray.setToolTip('Fotos App');
     global.tray.on('click', () => {
         global.win.isVisible() ? global.win.hide() : global.win.show();
     })

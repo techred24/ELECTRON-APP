@@ -1,6 +1,6 @@
 const os = require('os')
 const { setIpc, openDirectory, saveFile, openPreferences } = require('./main-window/ipcRendererEvents');
-const { addImagesEvents, searchImagesEvent, selectEvent } = require('./main-window/images-ui');
+const { addImagesEvents, searchImagesEvent, selectEvent, print } = require('./main-window/images-ui');
 
 window.addEventListener('load', () => {
     // document.getElementById('mensaje').innerHTML = 'Message inserted by JS'
@@ -13,6 +13,7 @@ window.addEventListener('load', () => {
     buttonEvent('open-directory', openDirectory);
     buttonEvent('open-preferences', openPreferences);
     buttonEvent('save-button', saveFile);
+    buttonEvent('print-button', print);
 });
 
 function buttonEvent(id, func) {

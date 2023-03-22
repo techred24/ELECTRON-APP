@@ -88,6 +88,9 @@ function clearImages() {
         oldImages[i].parentNode.removeChild(oldImages[i]);
     }
 }
+function print () {
+    window.print();
+}
 
 module.exports = {
     addImagesEvents,
@@ -96,5 +99,6 @@ module.exports = {
     selectEvent,
     searchImagesEvent,
     loadImages,
-    clearImages
+    clearImages,
+    print
 }
