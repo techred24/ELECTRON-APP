@@ -1,15 +1,18 @@
 'use strict'
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Tray } = require('electron');
 const { devtools } = require('../devtools');
 // const installExtension = require('electron-devtools-installer');
 // const { REDUX_DEVTOOLS } = require('electron-devtools-installer');
 const handleErrors = require('./handle-errors');
 const setIpcMain = require('./ipcMainEvents');
+const os = require('os');
 const ElectronStore = require('electron-store');
+const path = require('path');
 ElectronStore.initRenderer();
 
 global.win ;
+global.tray;
 
 if(process.env.NODE_ENV === 'development'){
     devtools();
@@ -58,6 +61,14 @@ app.on('ready', () => {
        global.win = null;
         app.quit();
     });
+    let icon;
+    if (os.platform() === 'win32') icon = path.join(__dirname, 'assets', 'icons', 'tray-icon.ico')
+    else path.join(__dirname, 'assets', 'icons', 'tray-icon.png')
+    global.tray = new Tray(icon);
+    global.setToolTip('Fotos App');
+    global.tray.on('click', () => {
+        global.win.isVisible() ? global.win.hide() : global.win.show();
+    })
     //global.win.loadURL('http://devdocs.io/');
     //global.win.loadURL(`file://${__dirname}/index.html`);
    global.win.loadFile(`./renderer/index.html`);
